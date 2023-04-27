@@ -1,6 +1,5 @@
 use cosmwasm_std::Addr;
 use cw_storage_plus::{Index, IndexList, IndexedMap, Map, MultiIndex};
-
 use pfc_notes::{NoteEntry, SubTopicKey};
 
 pub(crate) const TOPICSET_KEY: &str = "topic_001";
@@ -37,7 +36,7 @@ pub fn topic_subtopics<'a>() -> IndexedMap<'a, String, SubTopicKey, TopicSubtopi
 }
 
 pub fn note_idx(_pk: &[u8], d: &NoteEntry) -> String {
-    format!("{}/{}", d.topic, d.sub_topic)
+    format!("{}_{}", d.topic, d.sub_topic)
 }
 
 pub struct NoteIndexes<'a> {

@@ -6,13 +6,18 @@ use cosmwasm_std::{
 };
 use cw2::ContractVersion;
 use cw_ownable::Ownership;
-
 use pfc_notes::{InstantiateMsg, NoteEntry, NoteType, NoteWriter};
 
-use crate::error::ContractError;
-use crate::execute::{exec_add_note, exec_add_writer, exec_rm_note, exec_rm_writer};
-use crate::query::{query_entries, query_note, query_sub_topics, query_topics, query_writer};
-use crate::{instantiate, CONTRACT_NAME, CONTRACT_VERSION};
+use crate::{
+    error::ContractError,
+    execute::{
+        exec_add_note, exec_add_writer, exec_rm_note, exec_rm_sub_topic, exec_rm_topic,
+        exec_rm_writer,
+    },
+    instantiate,
+    query::{query_entries, query_note, query_sub_topics, query_topics, query_writer},
+    CONTRACT_NAME, CONTRACT_VERSION,
+};
 
 //use super::*;
 
@@ -277,10 +282,26 @@ fn notes() {
     let topics = query_topics(deps.as_ref(), Some("topic2".into()), None).unwrap();
     assert_eq!(topics.entries.len(), 0);
     let subs = query_sub_topics(deps.as_ref(), "topic".into(), None, None).unwrap();
-    eprintln!("{:?}", subs.entries);
+
     assert_eq!(subs.entries.len(), 2);
     let subs = query_sub_topics(deps.as_ref(), "topic2".into(), None, None).unwrap();
     assert_eq!(subs.entries.len(), 1);
     let subs = query_sub_topics(deps.as_ref(), "topic".into(), Some("sub".into()), None).unwrap();
     assert_eq!(subs.entries.len(), 1);
+
+    let notes = query_entries(deps.as_ref(), "topic2", "sub", None, None).unwrap();
+    assert_eq!(notes.entries.len(), 2);
+
+    let notes =
+        query_entries(deps.as_ref(), "topic2", "sub", Some("name".to_string()), None).unwrap();
+    assert_eq!(notes.entries.len(), 1);
+
+    exec_rm_note(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub", "name").unwrap();
+    exec_rm_note(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub", "name2").unwrap();
+    exec_rm_sub_topic(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub").unwrap();
+    let subs = query_sub_topics(deps.as_ref(), "topic2".into(), None, None).unwrap();
+    assert_eq!(subs.entries.len(), 0);
+    exec_rm_topic(deps.as_mut(), &Addr::unchecked("pie"), "topic2").unwrap();
+    let topics = query_topics(deps.as_ref(), None, None).unwrap();
+    assert_eq!(topics.entries.len(), 1);
 }

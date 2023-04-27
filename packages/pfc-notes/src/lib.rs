@@ -41,7 +41,7 @@ pub struct NoteKey {
 }
 impl ToString for NoteKey {
     fn to_string(&self) -> String {
-        format!("{}/{}:{}", self.topic, self.sub_topic, self.name)
+        format!("{}_{}:{}", self.topic, self.sub_topic, self.name)
     }
 }
 #[cw_serde]

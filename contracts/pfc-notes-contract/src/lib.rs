@@ -1,15 +1,17 @@
 use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
 };
-
 use error::ContractError;
 use pfc_notes::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
-use crate::execute::{
-    exec_add_note, exec_add_writer, exec_rm_note, exec_rm_sub_topic, exec_rm_topic, exec_rm_writer,
+use crate::{
+    execute::{
+        exec_add_note, exec_add_writer, exec_rm_note, exec_rm_sub_topic, exec_rm_topic,
+        exec_rm_writer,
+    },
+    query::{query_entries, query_note, query_sub_topics, query_topics, query_writer},
+    state::WRITER,
 };
-use crate::query::{query_entries, query_note, query_sub_topics, query_topics, query_writer};
-use crate::state::WRITER;
 
 mod error;
 mod execute;

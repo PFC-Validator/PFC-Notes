@@ -1,7 +1,8 @@
-use crate::state::{notes, topic_subtopics, TOPICSMAP, WRITER};
 use cosmwasm_std::{Deps, Order, StdResult};
 use cw_storage_plus::Bound;
-use pfc_notes::{NoteEntry, NoteKey, NoteResponse, NoteWriter};
+use pfc_notes::{NoteEntry, NoteKey, NoteResponse, NoteWriter, SubTopicKey};
+
+use crate::state::{notes, topic_subtopics, TOPICSMAP, WRITER};
 
 const DEFAULT_LIMIT: u32 = 10;
 const MAX_LIMIT: u32 = 30;
@@ -45,7 +46,7 @@ pub(crate) fn query_topics(
         entries: TOPICSMAP
             .range(deps.storage, start, None, Order::Ascending)
             .take(limit_amt)
-            .map(|item| item.map(|(k, _)| k.to_string()))
+            .map(|item| item.map(|(k, _)| k))
             .collect::<StdResult<Vec<String>>>()?,
     })
 }
@@ -55,19 +56,27 @@ pub(crate) fn query_sub_topics(
     topic: &str,
     start_after: Option<String>,
     limit: Option<u32>,
-) -> StdResult<NoteResponse<String>> {
+) -> StdResult<NoteResponse<SubTopicKey>> {
     let limit_amt = limit.unwrap_or(DEFAULT_LIMIT).min(MAX_LIMIT) as usize;
-    let start = start_after.map(Bound::exclusive);
+    let start = if let Some(start_sub) = start_after {
+        let subtopic_key = SubTopicKey {
+            topic: topic.to_string(),
+            sub_topic: start_sub,
+        };
+        Some(Bound::exclusive(subtopic_key.to_string()))
+    } else {
+        None
+    };
 
     Ok(NoteResponse {
         entries: topic_subtopics()
             .idx
             .topic
             .prefix(topic.into())
-            .keys(deps.storage, start, None, Order::Ascending)
+            .range(deps.storage, start, None, Order::Ascending)
             .take(limit_amt)
-            .map(|item| item.map(|k| k.to_string()))
-            .collect::<StdResult<Vec<String>>>()?,
+            .map(|item| item.map(|(_, v)| v))
+            .collect::<StdResult<Vec<SubTopicKey>>>()?,
     })
 }
 
@@ -77,19 +86,28 @@ pub(crate) fn query_entries(
     sub_topic: &str,
     start_after: Option<String>,
     limit: Option<u32>,
-) -> StdResult<NoteResponse<String>> {
+) -> StdResult<NoteResponse<NoteEntry>> {
     let limit_amt = limit.unwrap_or(DEFAULT_LIMIT).min(MAX_LIMIT) as usize;
-    let start = start_after.map(Bound::exclusive);
-
+    //  let start = start_after.map(Bound::exclusive);
+    let start = if let Some(start_note) = start_after {
+        let note_key = NoteKey {
+            topic: topic.to_string(),
+            sub_topic: sub_topic.to_string(),
+            name: start_note,
+        };
+        Some(Bound::exclusive(note_key.to_string()))
+    } else {
+        None
+    };
     Ok(NoteResponse {
         entries: notes()
             .idx
             .subtopic
             .prefix(format!("{}_{}", topic, sub_topic))
-            .keys(deps.storage, start, None, Order::Ascending)
+            .range(deps.storage, start, None, Order::Ascending)
             .take(limit_amt)
-            .map(|item| item.map(|k| k.to_string()))
-            .collect::<StdResult<Vec<String>>>()?,
+            .map(|item| item.map(|(_k, v)| v))
+            .collect::<StdResult<Vec<NoteEntry>>>()?,
     })
 }
 

@@ -1,9 +1,10 @@
 use cosmwasm_std::{Addr, DepsMut, Response, Storage};
-
 use pfc_notes::{NoteEntry, NoteKey, NoteType, SubTopicKey};
 
-use crate::error::ContractError;
-use crate::state::{notes, topic_subtopics, TOPICSMAP, WRITER};
+use crate::{
+    error::ContractError,
+    state::{notes, topic_subtopics, TOPICSMAP, WRITER},
+};
 
 pub fn assert_is_writer(store: &dyn Storage, addr: &Addr) -> Result<(), ContractError> {
     WRITER.load(store, addr.clone())?;
