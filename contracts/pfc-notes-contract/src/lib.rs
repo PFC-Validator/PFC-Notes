@@ -18,9 +18,6 @@ mod execute;
 mod query;
 mod state;
 
-#[cfg(test)]
-mod testing;
-
 pub const CONTRACT_NAME: &str = "crates.io:pfc-notes-contract";
 pub const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -120,3 +117,6 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         } => to_binary(&query_note(deps, &topic, &sub_topic, &name)?),
     }
 }
+
+#[cfg(test)]
+mod testing;

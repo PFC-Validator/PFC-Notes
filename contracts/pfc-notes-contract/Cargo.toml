@@ -26,6 +26,5 @@ cosmwasm-std = { workspace = true }
 cw2 = { workspace = true }
 cw-ownable = { workspace = true }
 cw-storage-plus = { workspace = true }
-cw-item-set = { workspace = true }
 pfc-notes = { path = "../../packages/pfc-notes" }
 thiserror = { workspace = true }

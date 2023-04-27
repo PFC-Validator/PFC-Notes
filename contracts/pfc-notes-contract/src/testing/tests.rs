@@ -86,14 +86,14 @@ fn writers() {
     let writers = query_writer(deps.as_ref(), None, None).unwrap();
     assert_eq!(writers.entries.len(), 2);
     assert_eq!(
-        writers.entries.clone().into_iter().find(|p| p.address == String::from("pie")).unwrap(),
+        writers.entries.clone().into_iter().find(|p| p.address == "pie").unwrap(),
         NoteWriter {
             address: String::from("pie"),
             name: String::from("pie name")
         }
     );
     assert_eq!(
-        writers.entries.into_iter().find(|p| p.address == String::from("latte")).unwrap(),
+        writers.entries.into_iter().find(|p| p.address == "latte").unwrap(),
         NoteWriter {
             address: String::from("latte"),
             name: String::from("spiced")
@@ -102,30 +102,24 @@ fn writers() {
     let writers = query_writer(deps.as_ref(), Some("latte".into()), None).unwrap();
     assert_eq!(writers.entries.len(), 1);
     assert_eq!(
-        writers.entries.clone().into_iter().find(|p| p.address == String::from("pie")).unwrap(),
+        writers.entries.clone().into_iter().find(|p| p.address == "pie").unwrap(),
         NoteWriter {
             address: String::from("pie"),
             name: String::from("pie name")
         }
     );
-    assert_eq!(writers.entries.into_iter().find(|p| p.address == String::from("latte")), None);
+    assert_eq!(writers.entries.into_iter().find(|p| p.address == "latte"), None);
 
     exec_rm_writer(deps.as_mut(), "pie").unwrap();
     let writers = query_writer(deps.as_ref(), None, None).unwrap();
     assert_eq!(writers.entries.len(), 1);
-    assert_eq!(
-        writers.entries.clone().into_iter().find(|p| p.address == String::from("pie")),
-        None
-    );
+    assert_eq!(writers.entries.into_iter().find(|p| p.address == "pie"), None);
     exec_add_writer(deps.as_mut(), "bread", "also tastes yuk").unwrap();
     let writers = query_writer(deps.as_ref(), None, None).unwrap();
     assert_eq!(writers.entries.len(), 2);
+    assert_eq!(writers.entries.clone().into_iter().find(|p| p.address == "pie"), None);
     assert_eq!(
-        writers.entries.clone().into_iter().find(|p| p.address == String::from("pie")),
-        None
-    );
-    assert_eq!(
-        writers.entries.clone().into_iter().find(|p| p.address == String::from("bread")),
+        writers.entries.into_iter().find(|p| p.address == "bread"),
         Some(NoteWriter {
             address: "bread".into(),
             name: "also tastes yuk".into()
@@ -176,12 +170,12 @@ fn notes() {
             } => {},
             _ => {
                 eprintln!("{:?}", std);
-                assert!(false, "wrong error")
+                unreachable!("wrong error")
             },
         },
         _ => {
             eprintln!("{:?}", err);
-            assert!(false, "wrong error")
+            unreachable!("wrong error")
         },
     };
     let err =
@@ -193,12 +187,12 @@ fn notes() {
             } => {},
             _ => {
                 eprintln!("{:?}", std);
-                assert!(false, "wrong error")
+                unreachable!("wrong error")
             },
         },
         _ => {
             eprintln!("{:?}", err);
-            assert!(false, "wrong error")
+            unreachable!("wrong error")
         },
     }
     // functionality
@@ -231,7 +225,7 @@ fn notes() {
         } => {},
         _ => {
             eprintln!("{:?}", err);
-            assert!(false, "wrong error")
+            unreachable!("wrong error")
         },
     }
 
@@ -242,7 +236,7 @@ fn notes() {
         } => {},
         _ => {
             eprintln!("{:?}", err);
-            assert!(false, "wrong error")
+            unreachable!("wrong error")
         },
     }
     exec_add_note(
@@ -281,12 +275,12 @@ fn notes() {
     assert_eq!(topics.entries.len(), 1);
     let topics = query_topics(deps.as_ref(), Some("topic2".into()), None).unwrap();
     assert_eq!(topics.entries.len(), 0);
-    let subs = query_sub_topics(deps.as_ref(), "topic".into(), None, None).unwrap();
+    let subs = query_sub_topics(deps.as_ref(), "topic", None, None).unwrap();
 
     assert_eq!(subs.entries.len(), 2);
-    let subs = query_sub_topics(deps.as_ref(), "topic2".into(), None, None).unwrap();
+    let subs = query_sub_topics(deps.as_ref(), "topic2", None, None).unwrap();
     assert_eq!(subs.entries.len(), 1);
-    let subs = query_sub_topics(deps.as_ref(), "topic".into(), Some("sub".into()), None).unwrap();
+    let subs = query_sub_topics(deps.as_ref(), "topic", Some("sub".into()), None).unwrap();
     assert_eq!(subs.entries.len(), 1);
 
     let notes = query_entries(deps.as_ref(), "topic2", "sub", None, None).unwrap();
@@ -299,7 +293,7 @@ fn notes() {
     exec_rm_note(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub", "name").unwrap();
     exec_rm_note(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub", "name2").unwrap();
     exec_rm_sub_topic(deps.as_mut(), &Addr::unchecked("pie"), "topic2", "sub").unwrap();
-    let subs = query_sub_topics(deps.as_ref(), "topic2".into(), None, None).unwrap();
+    let subs = query_sub_topics(deps.as_ref(), "topic2", None, None).unwrap();
     assert_eq!(subs.entries.len(), 0);
     exec_rm_topic(deps.as_mut(), &Addr::unchecked("pie"), "topic2").unwrap();
     let topics = query_topics(deps.as_ref(), None, None).unwrap();

@@ -18,8 +18,8 @@ cosmwasm-std    = "1.2"
 cw2             = "1.0"
 cw-ownable      = "0.5"
 thiserror       = "1"
-cw-storage-plus = {version="1.0", features=["iterator"]}
-cw-item-set = "0.7.1"
+cw-storage-plus = {version="1.0"}
+
 
 [profile.release]
 codegen-units    = 1
