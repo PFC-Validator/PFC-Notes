@@ -193,6 +193,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "cw-item-set"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dea5a233bd67babedbe96a514178a64b0c597f1f38bc474fa8d63e3f26bdceb2"
+dependencies = [
+ "cosmwasm-std",
+ "cw-storage-plus",
+]
+
+[[package]]
 name = "cw-ownable"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -448,26 +458,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a987beff54b60ffa6d51982e1aa1146bc42f19bd26be28b0586f252fccf5317"
 
 [[package]]
-name = "my-contract"
-version = "0.0.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-ownable",
- "cw2",
- "my-package",
- "thiserror",
-]
-
-[[package]]
-name = "my-package"
-version = "0.0.0"
-dependencies = [
- "cosmwasm-schema",
- "cw-ownable",
-]
-
-[[package]]
 name = "once_cell"
 version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -478,6 +468,30 @@ name = "opaque-debug"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
+
+[[package]]
+name = "pfc-notes"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-ownable",
+ "cw-storage-plus",
+]
+
+[[package]]
+name = "pfc-notes-contract"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-item-set",
+ "cw-ownable",
+ "cw-storage-plus",
+ "cw2",
+ "pfc-notes",
+ "thiserror",
+]
 
 [[package]]
 name = "pkcs8"

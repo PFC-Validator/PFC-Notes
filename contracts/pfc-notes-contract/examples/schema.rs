@@ -1,10 +1,10 @@
 use cosmwasm_schema::write_api;
-use my_package::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use pfc_notes::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {
         instantiate: InstantiateMsg,
         execute: ExecuteMsg,
         query: QueryMsg,
-    };
+    }
 }
