@@ -1,0 +1,8 @@
+{
+  "owner": "terra1pphdny9hgu3v59jhea6gaxjwrtguul6rqtwfqp",
+  "writers": [
+    {"address": "terra1pphdny9hgu3v59jhea6gaxjwrtguul6rqtwfqp","name": "pisco"},
+    {"address": "terra1tyvclmg0aymjs7jmtqfqdytyrvnx22f68j5s75","name": "cron"},
+    {"address": "terra1yt8xwehw3mngc7h2z09utf32cgpdpe09lke902","name": "testadmin"}
+  ]
+}

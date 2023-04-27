@@ -9,6 +9,7 @@ pub enum NoteType {
     Json = 1,
     String = 2,
     Ipfs = 3,
+    Base64 = 4,
 }
 
 impl ToString for NoteType {
@@ -17,6 +18,7 @@ impl ToString for NoteType {
             NoteType::Ipfs => String::from("IPFS"),
             NoteType::String => String::from("String"),
             NoteType::Json => String::from("Json"),
+            NoteType::Base64 => String::from("Base64"),
         }
     }
 }
@@ -28,6 +30,7 @@ impl FromStr for NoteType {
             "IPFS" => Ok(NoteType::Ipfs),
             "JSON" => Ok(NoteType::Json),
             "String" => Ok(NoteType::String),
+            "Base64" => Ok(NoteType::Base64),
             _ => Err(()),
         }
     }
@@ -154,3 +157,6 @@ pub enum QueryMsg {
         name: String,
     },
 }
+
+#[cw_serde]
+pub struct MigrateMsg {}

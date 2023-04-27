@@ -1,0 +1,15 @@
+
+# phoenix
+terrad tx wasm store ./artifacts/pfc_notes_contract-aarch64.wasm --from pisco-validator --yes --fees 300000uluna --gas 2500000
+# 8844
+json=$(cat ./notes/instantiate_pisco.json)
+terrad tx wasm instantiate 8844 "${json}" --admin terra1pphdny9hgu3v59jhea6gaxjwrtguul6rqtwfqp --label pfc-notes --from pisco-validator --fees 75000uluna --gas 500000
+
+# terra14e3md46zxsdz92m3klkgk6qfym5dwutfsu0lgl3zw9zrmzwrc9fstm0zlm
+
+terrad tx wasm migrate terra14e3md46zxsdz92m3klkgk6qfym5dwutfsu0lgl3zw9zrmzwrc9fstm0zlm 8843 '{}' --from pisco-validator --fees 30000uluna
+
+terrad query wasm cs smart terra14e3md46zxsdz92m3klkgk6qfym5dwutfsu0lgl3zw9zrmzwrc9fstm0zlm '{"topics":{}}'
+
+export prop='ewogICAgIm1haW5uZXQiOiBbCiAgICAgICAgMTUwMiwKICAgICAgICAxNTI1LAogICAgICAgIDI2MTYsCiAgICAgICAgMzE4NiwKICAgICAgICAzNDYwLAogICAgICAgIDM1MzMsCiAgICAgICAgMzUzNCwKICAgICAgICAzNjEyLAogICAgICAgIDM2MTksCiAgICAgICAgMzYyNywKICAgICAgICAzNjY1LAogICAgICAgIDM3OTYsCiAgICAgICAgNDU5MSwKICAgICAgICA0NTkyLAogICAgICAgIDQ1OTMsCiAgICAgICAgNDU5NiwKICAgICAgICA0NzE0LAogICAgICAgIDQ3MTUsCiAgICAgICAgNDcxNiwKICAgICAgICA0NzE3LAogICAgICAgIDQ3MjIKICAgIF0sCiAgICAiY2xhc3NpYyI6IFsKICAgICAgICAxMTY0LAogICAgICAgIDExODgsCiAgICAgICAgMTI3MywKICAgICAgICAxMjk5LAogICAgICAgIDE1OTcsCiAgICAgICAgMTYyMywKICAgICAgICAxNjkxLAogICAgICAgIDE3NDcsCiAgICAgICAgMTM4NSwKICAgICAgICAxNzUzLAogICAgICAgIDE4NjEsCiAgICAgICAgMTg2NiwKICAgICAgICAyOTk2LAogICAgICAgIDM1NjgsCiAgICAgICAgMzU2NCwKICAgICAgICAzNTY1LAogICAgICAgIDQwODAsCiAgICAgICAgNDA2NiwKICAgICAgICA0MDk1LAogICAgICAgIDQxNTksCiAgICAgICAgNDY2MSwKICAgICAgICA0NzM2LAogICAgICAgIDQ3MzcsCiAgICAgICAgNDk0MCwKICAgICAgICA1MTEzLAogICAgICAgIDUyMzQsCiAgICAgICAgNzEwMSwKICAgICAgICAxMDg3OSwKICAgICAgICAxMDkzNiwKICAgICAgICAxMDk0MCwKICAgICAgICAxMDk1MCwKICAgICAgICAxMDk2MCwKICAgICAgICAxMTAzMCwKICAgICAgICAxMTA0OSwKICAgICAgICAxMTI0MiwKICAgICAgICAxMTI0MywKICAgICAgICAxMTM5NwogICAgXQp9'
+terrad tx wasm exec terra14e3md46zxsdz92m3klkgk6qfym5dwutfsu0lgl3zw9zrmzwrc9fstm0zlm "{\"add_note\":{\"topic\":\"station\",\"sub_topic\":\"phoenix-1\",\"name\":\"proposals\",\"note_type\":\"base64\",\"note\":\"${prop}\"}}" --from pisco-validator --fees 3000uluna

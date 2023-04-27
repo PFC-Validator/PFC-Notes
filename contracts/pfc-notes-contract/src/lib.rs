@@ -2,7 +2,7 @@ use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
 };
 use error::ContractError;
-use pfc_notes::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use pfc_notes::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
 
 use crate::{
     execute::{
@@ -116,6 +116,11 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
             name,
         } => to_binary(&query_note(deps, &topic, &sub_topic, &name)?),
     }
+}
+
+#[entry_point]
+pub fn migrate(mut _deps: DepsMut, _env: Env, _msg: MigrateMsg) -> Result<Response, ContractError> {
+    Ok(Response::default())
 }
 
 #[cfg(test)]
